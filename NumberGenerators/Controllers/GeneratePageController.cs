@@ -16,6 +16,12 @@ namespace NumberGenerators.Controllers
             using (var data = new DataBase())
             {
                 Generator generator = data.Generators.First(g => g.ID == id);
+                GeneratorWithDetails generatorWithDetails = new GeneratorWithDetails();
+                generatorWithDetails._Generator = generator;
+                generatorWithDetails.Numbers = new List<int>();
+
+                AzureConnectionSingleton.GetInstance();
+
                 return View(generator);
             }
 
