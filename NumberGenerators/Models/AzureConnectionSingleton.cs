@@ -22,6 +22,11 @@ namespace NumberGenerators.Models
             table.CreateIfNotExists();
         }
 
+        public void StoreNumbers()
+        {
+
+        }
+
         public static AzureConnectionSingleton GetInstance()
         {
             if (instance == null)
