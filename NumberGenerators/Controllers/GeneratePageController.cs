@@ -11,13 +11,13 @@ using System.Web.Mvc;
 
 namespace NumberGenerators.Controllers
 {
+    
     public class GeneratePageController : Controller
     {
-        private Guid id;
         // GET: GeneratePage
         public ActionResult Index(Guid id)
         {
-            this.id = id;
+            
             using (var data = new DataBase())
             {
                 Generator generator = data.Generators.First(g => g.ID == id);
@@ -25,16 +25,20 @@ namespace NumberGenerators.Controllers
                 generatorWithDetails._Generator = generator;
                 generatorWithDetails.Numbers = new List<int>();
 
-                AzureConnectionSingleton.GetInstance();
+                List<IntNumber> list =  AzureConnectionSingleton.GetInstance().GetNumbers(id);
 
-                return View(generator);
+                Model m = new Model();
+                m.generator = generator;
+                m.numberList = list;
+
+                return View(m);
             }
 
                 return View();
         }
 
         [System.Web.Http.HttpPost]
-        public ActionResult GenerateNumbers()
+        public ActionResult GenerateNumbers([FromBody] Guid guid)
         {
 
             string html = string.Empty;
@@ -53,15 +57,15 @@ namespace NumberGenerators.Controllers
             List<IntNumber> numbers = new List<IntNumber>();
             List<string> charNumbers = new List<string>();
             charNumbers = html.Split(' ').ToList();
-            for (int i = 0; i < charNumbers.Count; i++)
+            for (int i = 1; i < charNumbers.Count-1; i++)
             {
                 if (false == String.IsNullOrEmpty(charNumbers[i]))
                 {
-                    numbers.Add(new IntNumber() { Number = int.Parse(charNumbers[i]), PartitionKey = id.ToString(), RowKey = id.ToString() });
+                    numbers.Add(new IntNumber() { Number = int.Parse(charNumbers[i]), PartitionKey = guid.ToString(), RowKey = guid.ToString() + Guid.NewGuid().ToString() });
                 }
             }
             AzureConnectionSingleton.GetInstance().StoreNumbers(numbers);
-            return RedirectToAction("Index", "GeneratePage", new { id = this.id });
+            return RedirectToAction("Index", "GeneratePage", new { id = guid });
         }
     }
 }

@@ -33,6 +33,20 @@ namespace NumberGenerators.Models
             }
         }
 
+        public List<IntNumber> GetNumbers(Guid userGuid)
+        {
+
+            var query = new TableQuery<IntNumber>().Where(
+TableQuery.GenerateFilterCondition(
+"PartitionKey",
+QueryComparisons.GreaterThanOrEqual,
+userGuid.ToString()
+)
+);
+             List<IntNumber> list = table.ExecuteQuery(query).ToList();
+            return list;
+        }
+
         public static AzureConnectionSingleton GetInstance()
         {
             if (instance == null)

@@ -1,0 +1,18 @@
+﻿@model NumberGenerators.Models.UserPass
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("Register", "Register"))
+{
+    <label>User:</label><br />
+    @Html.TextBoxFor(m => m.User)
+    <br />
+    <label>Pass:</label><br />
+    @Html.TextBoxFor(m=>m.Pass);
+    <br />
+    <input type="submit" />
+}
