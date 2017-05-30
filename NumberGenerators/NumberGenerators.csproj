@@ -213,6 +213,7 @@
     <Compile Include="Models\AzureConnectionSingleton.cs" />
     <Compile Include="Models\GeneratorWithDetails.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\IntNumber.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\UserPass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

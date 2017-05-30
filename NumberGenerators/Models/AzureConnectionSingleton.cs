@@ -12,19 +12,25 @@ namespace NumberGenerators.Models
     public class AzureConnectionSingleton
     {
         private static AzureConnectionSingleton instance = null;
+        CloudTableClient tableClient;
+        CloudTable table;
 
         private AzureConnectionSingleton()
         {
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
     CloudConfigurationManager.GetSetting("StorageConnectionString"));
-            CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            CloudTable table = tableClient.GetTableReference("Generators");
+            tableClient = storageAccount.CreateCloudTableClient();
+            table = tableClient.GetTableReference("Generators");
             table.CreateIfNotExists();
         }
 
-        public void StoreNumbers()
+        public void StoreNumbers(List<IntNumber> numbers)
         {
-
+            for(int i = 0; i < numbers.Count; i ++)
+            {
+                TableOperation to = TableOperation.Insert(numbers[i]);
+                table.Execute(to);
+            }
         }
 
         public static AzureConnectionSingleton GetInstance()

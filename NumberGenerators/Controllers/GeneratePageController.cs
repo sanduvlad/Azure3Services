@@ -37,7 +37,7 @@ namespace NumberGenerators.Controllers
         {
 
             string html = string.Empty;
-            string url = @"https://api.stackexchange.com/2.2/answers?order=desc&sort=activity&site=stackoverflow";
+            string url = @"https://primenumbergenerator.azurewebsites.net/api/HttpTriggerCSharp1?code=jYCUrJvUaMoIaCDfKEZguaYjtDEtt7Kkt2Zc54n/9VkY1mtmabwHgA==";
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.AutomaticDecompression = DecompressionMethods.GZip;
@@ -49,23 +49,18 @@ namespace NumberGenerators.Controllers
                 html = reader.ReadToEnd();
             }
 
-            List<int> numbers = new List<int>();
+            List<IntNumber> numbers = new List<IntNumber>();
             List<string> charNumbers = new List<string>();
             charNumbers = html.Split(' ').ToList();
             for (int i = 0; i < charNumbers.Count; i++)
             {
-                if (false == String.IsNullOrEmpty( charNumbers[i]))
+                if (false == String.IsNullOrEmpty(charNumbers[i]))
                 {
-                    numbers.Add(int.Parse(charNumbers[i]));
+                    numbers.Add(new IntNumber() { Number = int.Parse(charNumbers[i]), PartitionKey = id.ToString(), RowKey = id.ToString() });
                 }
             }
-            AzureConnectionSingleton.GetInstance().
+            AzureConnectionSingleton.GetInstance().StoreNumbers(numbers);
             return RedirectToAction("Index", "GeneratePage", new { id = this.id });
         }
-    }
-
-    public class InNumber : TableEntity
-    {
-        public int Number { get; set; }
     }
 }
