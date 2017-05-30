@@ -10,7 +10,6 @@
 <h6>Wellcome @(Model.UserName)</h6>
 
 
-@using (Html.BeginForm("GenerateNumbers", "GeneratePage"))
-{
+<form action="/GeneratePage/GenerateNumbers" method="post">
     <input type="button" />
-}
+</form>
